@@ -1,18 +1,18 @@
-"use client";
+'use client'
 
-import Map from "@/components/Map";
+import Map from '@/components/Map'
 
 const HomePage = () => {
   return (
-    <div className="w-screen h-screen overflow-hidden">
-      <div className="size-full flex items-center justify-center">
+    <div className='h-screen w-screen overflow-hidden'>
+      <div className='flex size-full items-center justify-center'>
         {/* Container cho bản đồ với kích thước cố định */}
-        <div className="size-full bg-gray-100 border border-gray-300 rounded-lg shadow-lg">
+        <div className='size-full rounded-lg border border-gray-300 bg-gray-100 shadow-lg'>
           <Map />
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default HomePage;
+export default HomePage

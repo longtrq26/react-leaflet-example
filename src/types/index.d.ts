@@ -1,6 +1,6 @@
-import { SVGProps, FC } from "react";
-
-declare module "*.svg" {
-  const content: FC<SVGProps<SVGSVGElement>>;
-  export default content;
+export interface Country {
+  name: string
+  flag: string
+  coordinates: [number, number]
+  zoom: number
 }

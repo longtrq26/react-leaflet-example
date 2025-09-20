@@ -1,67 +1,83 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
+/* Highlight on hover */
 .leaflet-interactive:hover {
-  fill: #bc9247;
-  stroke: #ffffff;
+  fill: #bc9247 !important;
+  stroke: #ffffff !important;
 }
 
+/* Marker bubble */
 .custom-marker .marker-content {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 3.5615rem 3.5615rem 3.5615rem 0;
-  transform: rotate(-45deg);
-  background: #ffffff;
-  width: 1.35338rem;
-  height: 1.35338rem;
-  overflow: hidden;
-  padding: 1px;
-  box-shadow: 0 1.203px 4.812px 0 rgba(0, 0, 0, 0.1);
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  transform: rotate(-45deg) !important;
+  box-shadow: 0 1.203px 4.812px 0 rgba(0, 0, 0, 0.1) !important;
+  border-radius: 3.5615rem 3.5615rem 3.5615rem 0 !important;
+  background: #ffffff !important;
+  padding: 1px !important;
+  width: 24px !important;
+  height: 24px !important;
+  overflow: hidden !important;
 }
 
 .flag-container {
-  display: flex;
-  justify-content: center;
-  border-radius: 356.14975rem;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  background: #fff;
-  border: 0.241px solid #ededed;
-  transform: rotate(45deg);
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  transform: rotate(45deg) !important;
+  border: 0.241px solid #ededed !important;
+  border-radius: 9999px !important;
+  background: #fff !important;
+  width: 100% !important;
+  height: 100% !important;
 }
 
 .flag-image {
-  border-radius: 356.14975rem;
-  border: 1.037px solid rgba(255, 255, 255, 0.2);
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  border: 1.037px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 9999px !important;
   background: linear-gradient(
     180deg,
     rgba(255, 255, 255, 0) 0%,
     rgba(255, 255, 255, 0) 58%,
     rgba(255, 255, 255, 0.7) 97.11%
-  );
+  ) !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
 }
 
+/* Tooltip */
 .leaflet-tooltip.custom-tooltip {
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #f7f6f1;
-  border: none;
-  border-radius: 6.25rem;
-  padding: 0.25rem 0.5rem;
-  box-shadow: 0 1.203px 4.812px 0 rgba(0, 0, 0, 0.1);
-  font-size: 0.75rem;
-  font-weight: 700;
-  line-height: 120%;
-  letter-spacing: -0.0075rem;
-  text-transform: uppercase;
-  color: #5c321e;
+  box-shadow: 0 1.203px 4.812px 0 rgba(0, 0, 0, 0.1) !important;
+  border-radius: 6.25rem !important;
+  background-color: #f7f6f1 !important;
+  padding: 0.25rem 0.5rem !important;
+  color: #5c321e !important;
+  font-weight: 700 !important;
+  font-size: 0.75rem !important;
+  line-height: 120% !important;
+  letter-spacing: -0.0075rem !important;
+  text-transform: uppercase !important;
 }
 
 .leaflet-tooltip.custom-tooltip:before {
-  display: none;
+  display: none !important;
+}
+
+/* Zoom Control */
+.leaflet-control-zoom {
+  display: flex !important;
+  bottom: 50px !important;
+  flex-direction: column !important;
+  gap: 0.88rem !important;
+  box-shadow: none !important;
+  border: none !important;
+  background: transparent !important;
+}
+
+.leaflet-control-zoom-in,
+.leaflet-control-zoom-out {
+  border-radius: 0.375rem !important;
+  background: rgba(183, 143, 116, 0.4) !important;
 }

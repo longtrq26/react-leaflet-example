@@ -1,0 +1,52 @@
+
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Testing
+/coverage
+/test-results/
+.nyc_output
+junit.xml
+
+# Next.js
+.next/
+out/
+.vercel/
+
+# Production
+/build
+/dist
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# Generated files (e.g., from Storybook or Playwright if used)
+.storybook/
+storybook-static/
+playwright-report/
+
+# Logs and debug
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Environment variables
+.env*.local
+
+# Misc
+*.pem
+docs/
