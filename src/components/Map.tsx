@@ -6,6 +6,7 @@ import worldData from '../../public/data/world.json'
 import 'leaflet/dist/leaflet.css'
 import { COUNTRIES, SPECIAL_COUNTRIES } from '@/constants'
 import { Feature, FeatureCollection, GeoJsonProperties, Geometry } from 'geojson'
+import CountryLayer from './CountryLayer'
 import CustomMarker from './CustomMarker'
 import MapHeader from './MapHeader'
 
@@ -68,12 +69,11 @@ const Map = () => {
       >
         <MapHeader targets={COUNTRIES} />
 
-        {COUNTRIES.map((item, index) => (
-          <CustomMarker
-            key={index}
-            name={item.name}
-            flag={item.flag}
-            coordinates={item.coordinates}
+        {COUNTRIES.map((item) => (
+          <CountryLayer
+            key={item.name}
+            country={item}
+            currentZoom={6}
           />
         ))}
         <GeoJSON

@@ -13,7 +13,7 @@ const MapHeader = memo(({ targets }: { targets: Target[] }) => {
   const map = useMap()
 
   const handleClick = (target: Target) => {
-    map.setView(target.coordinates, target.zoom, { animate: true })
+    map.flyTo(target.coordinates, target.zoom, { animate: true })
   }
 
   return (
@@ -25,7 +25,7 @@ const MapHeader = memo(({ targets }: { targets: Target[] }) => {
     >
       <nav className='flex h-[7.625rem] w-full'>
         <ul className='flex items-center gap-x-10 px-10'>
-          {targets.slice(3).map((item, index) => (
+          {targets.map((item, index) => (
             <li key={index}>
               <button
                 onClick={() => handleClick(item)}

@@ -1,8 +1,9 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useMemo } from 'react'
 import type * as Leaflet from 'leaflet'
 import dynamic from 'next/dynamic'
+import { useMap } from 'react-leaflet'
 
 const Marker = dynamic(() => import('react-leaflet').then((m) => m.Marker), {
   ssr: false,
@@ -15,40 +16,59 @@ interface MarkerProps {
   name: string
   flag: string
   coordinates: [number, number]
+  zoom: number
+  permanentTooltip?: boolean
 }
 
-const CustomMarker = ({ name, flag, coordinates }: MarkerProps) => {
-  const [L, setL] = useState<typeof Leaflet | null>(null)
-  const [isMounted, setIsMounted] = useState(false)
+const CustomMarker = ({
+  name,
+  flag,
+  coordinates,
+  zoom = 6,
+  permanentTooltip = false,
+}: MarkerProps) => {
+  const map = useMap()
 
-  useEffect(() => {
-    import('leaflet').then((leaflet) => {
-      setL(leaflet)
-      setIsMounted(true)
-    })
-  }, [])
+  const icon = useMemo(() => {
+    if (typeof window === 'undefined') return undefined
 
-  if (!L || !isMounted) return null
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const L = require('leaflet') as typeof Leaflet
 
-  const createMarkerIcon = (name: string, flagUrl: string) =>
-    L.divIcon({
+    const wrapper = `
+      <div class="marker-content">
+        <div class="flag-container">
+          ${flag ? `<img src="${flag}" alt="${name} flag" class="flag-image" />` : ''}
+        </div>
+      </div>
+    `
+
+    return L.divIcon({
       className: 'custom-marker',
       iconSize: [24, 24],
       iconAnchor: [10.825, 10.825],
-      html: `<div class="marker-content"><div class="flag-container"><img src="${flagUrl}" alt="${name} flag" class="flag-image" /></div></div>`,
+      html: wrapper,
     })
+  }, [name, flag])
+
+  if (!icon) return null
+
+  const handleClick = () => {
+    map.flyTo(coordinates, zoom, { animate: true })
+  }
 
   return (
     <Marker
       position={coordinates}
-      icon={createMarkerIcon(name, flag)}
+      icon={icon}
+      eventHandlers={{ click: handleClick }}
     >
       <Tooltip
         className='custom-tooltip'
         direction='bottom'
         offset={[0, 10]}
         opacity={1}
-        permanent
+        permanent={permanentTooltip}
       >
         {name}
       </Tooltip>
