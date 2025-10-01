@@ -2,7 +2,7 @@ import { Country } from '@/types'
 
 export const COUNTRIES: Country[] = [
   {
-    name: 'Vietnam',
+    name: 'Việt Nam',
     flag: '/vietnam.png',
     coordinates: [14.0583, 108.2772],
     zoom: 6,
@@ -10,7 +10,6 @@ export const COUNTRIES: Country[] = [
       { name: 'Hà Nội', coordinates: [21.0285, 105.8542] },
       { name: 'Hồ Chí Minh', coordinates: [10.7769, 106.7009] },
       { name: 'Đà Nẵng', coordinates: [16.0471, 108.2068] },
-      { name: 'Huế', coordinates: [16.4637, 107.5909] },
       { name: 'Trường Sa', coordinates: [8.6396, 111.9185] },
       { name: 'Hoàng Sa', coordinates: [16.8333, 112.3333] },
     ],

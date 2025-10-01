@@ -1,27 +1,36 @@
-'use client'
-
 import React, { useEffect, useRef } from 'react'
-import dynamic from 'next/dynamic'
+import { GeoJSON, MapContainer, ZoomControl } from 'react-leaflet'
 import worldData from '../../public/data/world.json'
 import 'leaflet/dist/leaflet.css'
 import { COUNTRIES, SPECIAL_COUNTRIES } from '@/constants'
 import { Feature, FeatureCollection, GeoJsonProperties, Geometry } from 'geojson'
 import CountryLayer from './CountryLayer'
-import CustomMarker from './CustomMarker'
 import MapHeader from './MapHeader'
 
-const MapContainer = dynamic(() => import('react-leaflet').then((m) => m.MapContainer), {
-  ssr: false,
-})
-const GeoJSON = dynamic(() => import('react-leaflet').then((m) => m.GeoJSON), {
-  ssr: false,
-})
-const ZoomControl = dynamic(() => import('react-leaflet').then((m) => m.ZoomControl), {
-  ssr: false,
-})
-
-const Map = () => {
+const MapImplementation = () => {
   const mapRef = useRef<L.Map | null>(null)
+  const containerRef = useRef<HTMLDivElement | null>(null) // Thêm ref cho container
+  const isInitialized = useRef(false)
+
+  useEffect(() => {
+    // Chỉ khởi tạo nếu chưa được khởi tạo
+    if (isInitialized.current) return
+
+    isInitialized.current = true
+
+    return () => {
+      if (mapRef.current) {
+        try {
+          mapRef.current.off()
+          mapRef.current.remove()
+          mapRef.current = null
+        } catch (e) {
+          console.warn('Map cleanup error:', e)
+        }
+      }
+      isInitialized.current = false
+    }
+  }, [])
 
   const getCountryStyle = (feature: Feature<Geometry, GeoJsonProperties> | undefined) => {
     const defaultStyle = {
@@ -34,7 +43,7 @@ const Map = () => {
     if (!feature?.properties?.name) return defaultStyle
 
     const countryName = feature.properties.name
-    if (countryName === 'Vietnam') return { ...defaultStyle, fillColor: '#EA3434' }
+    if (countryName === 'Việt Nam') return { ...defaultStyle, fillColor: '#EA3434' }
     if (SPECIAL_COUNTRIES.includes(countryName)) return { ...defaultStyle, fillColor: '#D4C0B6' }
 
     return defaultStyle
@@ -47,17 +56,11 @@ const Map = () => {
     [-50, 200],
   ]
 
-  useEffect(() => {
-    return () => {
-      if (mapRef.current) {
-        mapRef.current.remove()
-        mapRef.current = null
-      }
-    }
-  }, [])
-
   return (
-    <div className='h-screen w-screen'>
+    <div
+      ref={containerRef}
+      className='h-screen w-screen'
+    >
       <MapContainer
         ref={mapRef}
         center={[50, 0]}
@@ -66,9 +69,9 @@ const Map = () => {
         minZoom={2}
         maxBounds={maxBounds}
         style={{ height: '100%', width: '100%', backgroundColor: '#FFFFFF' }}
+        attributionControl={false}
       >
         <MapHeader targets={COUNTRIES} />
-
         {COUNTRIES.map((item) => (
           <CountryLayer
             key={item.name}
@@ -80,11 +83,10 @@ const Map = () => {
           style={getCountryStyle}
           data={geoJsonData}
         />
-
         <ZoomControl position='bottomleft' />
       </MapContainer>
     </div>
   )
 }
 
-export default Map
+export default MapImplementation

@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useMemo } from 'react'
 import { Country } from '@/types'
 import type * as Leaflet from 'leaflet'
 import dynamic from 'next/dynamic'
+import { useMap } from 'react-leaflet'
 import CustomMarker from './CustomMarker'
 
 const MarkerClusterGroup = dynamic(() => import('react-leaflet-cluster'), { ssr: false })
@@ -11,11 +13,11 @@ interface CountryLayerProps {
   currentZoom: number
 }
 
-const CountryLayer = ({ country, currentZoom }: CountryLayerProps) => {
+const CountryLayer = React.memo(({ country, currentZoom }: CountryLayerProps) => {
+  const map = useMap()
   const hasCities = Array.isArray(country.cities) && country.cities.length > 0
   const showCities = hasCities && currentZoom >= country.zoom
 
-  // Custom icon for cluster
   const createClusterCustomIcon = useMemo(() => {
     return (cluster: any) => {
       if (typeof window === 'undefined') return undefined
@@ -25,20 +27,32 @@ const CountryLayer = ({ country, currentZoom }: CountryLayerProps) => {
 
       const count = cluster.getChildCount()
 
-      // Custom HTML cho cluster với flag
       const html = `
-        <div class="cluster-marker">
-          <div class="cluster-flag-container">
-            <img src="${country.flag}" alt="${country.name}" class="cluster-flag" />
-            <span class="cluster-count">${count}</span>
+        <div class="relative w-[5rem] h-[3.26rem]">
+          <img
+            src="/bg-marker.png"
+            alt="${country.name}"
+            class="absolute w-full h-full top-0 left-1/2 -translate-x-1/2 object-cover"
+          />
+          <img
+            src="${country.flag}"
+            alt="${country.name}"
+            class="absolute size-[1.5rem] top-[1rem] left-1/2 -translate-x-1/2 object-cover rounded-full"
+          />
+          <div class="absolute top-[0.5rem] right-[0.5rem] flex size-[1.25rem] items-center justify-center rounded-full bg-[#EA3434] text-[0.625rem] font-bold text-white shadow-md">
+            ${count}
+          </div>
+          <div class="text-brown absolute bottom-[-0.1rem] left-1/2 flex h-[1.375rem] w-fit -translate-x-1/2 translate-y-full items-center whitespace-nowrap rounded-[6.25rem] bg-[#E1DDC5] px-[0.5rem] text-[0.75rem] font-semibold uppercase leading-[1.2] tracking-[-0.0075rem]">
+            ${country.name}
           </div>
         </div>
       `
 
       return L.divIcon({
         html,
-        className: 'custom-cluster-icon',
-        iconSize: L.point(40, 40, true),
+        className: 'custom-marker',
+        iconSize: [80, 52],
+        iconAnchor: [40, 26],
       })
     }
   }, [country.flag, country.name])
@@ -51,11 +65,10 @@ const CountryLayer = ({ country, currentZoom }: CountryLayerProps) => {
         name={c.name}
         flag={country.flag}
         coordinates={c.coordinates}
-        zoom={12}
-        permanentTooltip={false}
+        zoom={6}
       />
     ))
-  }, [country])
+  }, [country, hasCities])
 
   if (!showCities) {
     return (
@@ -64,7 +77,6 @@ const CountryLayer = ({ country, currentZoom }: CountryLayerProps) => {
         flag={country.flag}
         coordinates={country.coordinates}
         zoom={country.zoom}
-        permanentTooltip
       />
     )
   }
@@ -72,13 +84,22 @@ const CountryLayer = ({ country, currentZoom }: CountryLayerProps) => {
   return (
     <MarkerClusterGroup
       chunkedLoading
+      zoomToBoundsOnClick={false}
       spiderfyOnEveryZoom={false}
       showCoverageOnHover={false}
       iconCreateFunction={createClusterCustomIcon}
+      maxClusterRadius={50}
+      eventHandlers={{
+        clusterclick: (e: any) => {
+          map.flyTo(e.latlng, country.zoom, { animate: true })
+        },
+      }}
     >
       {cityMarkers}
     </MarkerClusterGroup>
   )
-}
+})
+
+CountryLayer.displayName = 'CountryLayer'
 
 export default CountryLayer
