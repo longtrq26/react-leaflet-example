@@ -84,8 +84,9 @@ const CountryLayer = React.memo(({ country, currentZoom }: CountryLayerProps) =>
   return (
     <MarkerClusterGroup
       chunkedLoading
+      animate
+      animateAddingMarkers
       zoomToBoundsOnClick={false}
-      spiderfyOnEveryZoom={false}
       showCoverageOnHover={false}
       iconCreateFunction={createClusterCustomIcon}
       maxClusterRadius={50}
